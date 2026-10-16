@@ -16,7 +16,7 @@ Using AI tools for this challenge is allowed. Be honest here — an accurate
 
 List the main prompts you used. Paraphrasing is fine.
 
-1. `...`
+1.  I used Gemini to help understand Docker `stdin` errors, explain why `apt-get` stops for interactive input during file conflicts, and learn how to properly read BuildKit logs.
 2. `...`
 3. `...`
 
