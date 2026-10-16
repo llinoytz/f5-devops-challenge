@@ -17,7 +17,7 @@ Using AI tools for this challenge is allowed. Be honest here — an accurate
 List the main prompts you used. Paraphrasing is fine.
 
 1.  I used Gemini to help understand Docker `stdin` errors, explain why `apt-get` stops for interactive input during file conflicts, and learn how to properly read BuildKit logs.
-2. `...`
+2. Used Gemini to clarify Docker Compose internal networking and DNS. Specifically, the AI explained that 127.0.0.1 acts as a loopback to the container itself (not the host machine), which helped me understand exactly why the Nginx proxy was failing to reach the separate backend container.
 3. `...`
 
 ---

@@ -20,13 +20,13 @@ Reordered proxy/Dockerfile. Moved the COPY instruction to execute after the RUN 
 ## Defect 2: Proxy cannot reach the backend
 
 ### Symptom / error output
-
+The test-runner crashes with an "HTTP Error 502: Bad Gateway" when trying to reach "/api/info".
 ### How I diagnosed it
-
+ Diagnostic command:docker compose up (observing the 502 error in the logs, then inspecting "proxy/nginx.conf").
 ### Root cause
-
+The Nginx "upstream" block was incorrectly configured to route traffic to "127.0.0.1:8080". In Docker's isolated network environment, 127.0.0.1 points to the proxy's own container, not the backend container.
 ### Fix
-
+Updated proxy/nginx.conf to use Docker's internal DNS. Changed the upstream server address from 127.0.0.1:8080 to backend:8080, allowing the proxy to correctly resolve and route traffic to the backend service.
 ---
 
 ## Defect 3: Tests still fail after fixing defect 2
