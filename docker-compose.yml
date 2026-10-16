@@ -7,6 +7,11 @@ services:
       - "8080:8080"
     environment:
       - PORT=8080
+    healthcheck:
+      test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8080/health')"]
+      interval: 2s
+      timeout: 3s
+      retries: 5
 
   proxy:
     build:
@@ -15,12 +20,14 @@ services:
     ports:
       - "8081:80"
     depends_on:
-      - backend
+      backend:
+        condition: service_healthy
 
   test-runner:
     build:
       context: ./test-runner
     depends_on:
       - proxy
+      - backend
     environment:
       - PROXY_URL=http://proxy:80
