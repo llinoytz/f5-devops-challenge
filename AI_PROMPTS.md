@@ -16,9 +16,9 @@ Using AI tools for this challenge is allowed. Be honest here — an accurate
 
 List the main prompts you used. Paraphrasing is fine.
 
-1.  I used Gemini to help understand Docker `stdin` errors, explain why `apt-get` stops for interactive input during file conflicts, and learn how to properly read BuildKit logs.
-2. I used Gemini to clarify Docker Compose internal networking and DNS. Specifically, the AI explained that 127.0.0.1 acts as a loopback to the container itself (not the host machine), which helped me understand exactly why the Nginx proxy was failing to reach the separate backend container.
-3. It helped evaluate solutions and implement native Docker Compose features (`healthcheck` and `condition: service_healthy`) instead of anti-patterns like hardcoded delays or custom shell retry scripts.
+1. Error Decoding & Syntax: Used to parse verbose Docker BuildKit logs and quickly decode specific CI errors (like exit code 126) to find the exact Git command (`git update-index`) needed for file permissions.
+2. Docker Compose Best Practices: Consulted for the correct syntax to implement native `healthcheck` dependencies, and to verify how Docker's internal DNS resolves service names for the Nginx `upstream` block.
+3. Security Research: Used as a quick reference to verify the necessary `Dockerfile` commands for migrating to `nginx:alpine` and running the proxy securely as a non-root user.
 
 ---
 
@@ -28,6 +28,11 @@ Describe **one concrete case** where the AI's answer was wrong, outdated, or
 sub-optimal. Cover: what it suggested, how you noticed it was wrong, and what
 you did instead. 3–5 sentences.
 
+**The Error:**
+ While troubleshooting the connection between the proxy and the backend (Task 2), the AI initially suggested modifying the Python code in "backend/app.py" to change its host binding address and make it universally accessible (0.0.0.0). 
+
+**How I caught it:**
+ I immediately rejected this suggestion because I had read the project's ground rules, which explicitly stated: "Treat backend/app.py as a third-party service you cannot modify." Instead of blindly applying the AI's generated code, I relied on my own understanding of architecture constraints and fixed the issue strictly at the infrastructure level by correctly configuring the "nginx.conf" upstream block and the "docker-compose.yml" network mappings.
 > ...
 
 ---
