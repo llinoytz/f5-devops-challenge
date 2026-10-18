@@ -84,6 +84,15 @@ By default, Nginx runs as root because it needs to bind to port 80, which is a p
   1. **Dockerfile:** Granted the existing non-root nginx user ownership of the necessary cache, log, and config directories. Added the "USER nginx" directive to switch the execution context. Changed the exposed port to 8080.
   2. **nginx.conf:** Updated the "listen" directive to "8080" (an unprivileged port).
   3. **docker-compose.yml:** Updated the port mapping for the proxy service to "8081:8080" and updated the "PROXY_URL" environment variable for the "test-runner" to point to "http://proxy:8080".
+
+## Bonus 3:
+
+### Security (Reduced Attack Surface):
+ By switching to the minimal "nginx:alpine" base image in Bonus 1, we inherently stripped out unnecessary packages, debugging tools, and standard OS libraries. This drastically reduces the attack surface, leaving far fewer potential vulnerabilities for attackers to exploit.
+
+### Performance (Faster CI/CD and Scaling):
+The lightweight Alpine image significantly reduces network transfer times when pulling the image from a registry. This leads to faster CI/CD pipeline executions and quicker container startup times, which is critical for rapid auto-scaling in a production environment.
+
 ---
 
 ## Anything you would do differently with more time
