@@ -73,6 +73,17 @@ Image Size After Optimization: 28.8MB (Content Size) / 102MB (Disk Usage).
 Improvement: A reduction of approximately 77% in image size!
 >
 
+## Bonus 2: Running Proxy as a Non-Root User
+
+### Motivation
+ Running containers as the root user in production poses a severe security risk. If an attacker compromises the container, they instantly gain superuser privileges.
+* ### Root Cause
+By default, Nginx runs as root because it needs to bind to port 80, which is a privileged port (under 1024) in Linux.
+
+### Changes Made
+  1. **Dockerfile:** Granted the existing non-root nginx user ownership of the necessary cache, log, and config directories. Added the "USER nginx" directive to switch the execution context. Changed the exposed port to 8080.
+  2. **nginx.conf:** Updated the "listen" directive to "8080" (an unprivileged port).
+  3. **docker-compose.yml:** Updated the port mapping for the proxy service to "8081:8080" and updated the "PROXY_URL" environment variable for the "test-runner" to point to "http://proxy:8080".
 ---
 
 ## Anything you would do differently with more time
